@@ -1,6 +1,7 @@
 package com.example.simpleboard.post.service;
 
 
+import com.example.simpleboard.board.db.BoardRepository;
 import com.example.simpleboard.post.db.PostEntity;
 import com.example.simpleboard.post.db.PostRepository;
 import com.example.simpleboard.post.model.PostRequest;
@@ -17,11 +18,14 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final BoardRepository boardRepository;
     private final ReplyService replyService;
 
+
     public PostEntity create(PostRequest postRequest){
+        var boardEntity = boardRepository.findById(postRequest.getBoardId()).get();
         var entity = PostEntity.builder()
-                .boardId(1L)
+                .board(boardEntity)
                 .userName(postRequest.getUserName())
                 .password(postRequest.getPassword())
                 .email(postRequest.getEmail())

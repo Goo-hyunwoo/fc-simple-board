@@ -1,13 +1,14 @@
-package com.example.simpleboard.post.db;
+package com.example.simpleboard.post.model;
 
 import com.example.simpleboard.board.db.BoardEntity;
 import com.example.simpleboard.reply.db.ReplyEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -16,26 +17,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "Post")
-public class PostEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PostDto {
     private Long id;
 
-    @ManyToOne
-    @JsonIgnore
-    @ToString.Exclude
-    private BoardEntity board;
+    private Long boardId;
     private String userName;
     private String password;
     private String email;
     private String status;
     private String title;
-    @Column(columnDefinition = "TEXT")
     private String content;
     private LocalDateTime postedAt;
 
-    @Transient
-    private List<ReplyEntity> replyList = List.of();
 }
