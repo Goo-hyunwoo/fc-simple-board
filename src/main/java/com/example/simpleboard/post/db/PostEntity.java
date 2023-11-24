@@ -5,6 +5,8 @@ import com.example.simpleboard.reply.db.ReplyEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OrderBy;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -36,6 +38,9 @@ public class PostEntity {
     private String content;
     private LocalDateTime postedAt;
 
-    @Transient
+    @OneToMany(mappedBy = "post")
+    @Builder.Default
+    @Where(clause = "status = 'REGISTERED'")
+    @OrderBy(clause = "id desc")
     private List<ReplyEntity> replyList = List.of();
 }
