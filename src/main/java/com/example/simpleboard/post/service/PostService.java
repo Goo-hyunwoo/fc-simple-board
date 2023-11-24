@@ -5,6 +5,7 @@ import com.example.simpleboard.post.db.PostEntity;
 import com.example.simpleboard.post.db.PostRepository;
 import com.example.simpleboard.post.model.PostRequest;
 import com.example.simpleboard.post.model.PostViewRequest;
+import com.example.simpleboard.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,8 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final ReplyService replyService;
+
     public PostEntity create(PostRequest postRequest){
         var entity = PostEntity.builder()
                 .boardId(1L)
@@ -37,6 +40,9 @@ public class PostService {
                         var format = "패스워드가 맞지 않습니다. %s vs %s";
                         throw new RuntimeException(String.format(format, it.getPassword(), postViewRequest.getPassword()));
                     }
+
+                    var replyList = replyService.findAllByPostId(it.getId());
+                    it.setReplyList(replyList);
                     return it;
                 }).orElseThrow(() -> {
                     return new RuntimeException("해당 게시글이 존재하지 않습니다. : " +postViewRequest.getPostId());
